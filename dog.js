@@ -1,23 +1,33 @@
 const BREEDS_URL = `https://dog.ceo/api/breeds/list/all`;
-const select = document.querySelector(`.breeds`);
+const breedsSelectEl = document.querySelector(`.breeds`);
 
 fetch(BREEDS_URL)
   .then(function (response) {
     return response.json();
   })
   .then(function (data) {
-    const breedsObject = data.message;
-    const breedsArray = Object.keys(breedsObject);
-
-    for (let i = 0; i < breedsArray.length; i++) {
+    const breeds = Object.keys(data.message);
+    const breedsOptions = breeds.map((breed) => {
       const option = document.createElement(`option`);
-      option.value = breedsArray[i];
-      option.innerText = breedsArray[i];
-      select.appendChild(option);
-    }
+      option.value = breed;
+      option.innerText = breed;
+
+      return option;
+    });
+
+    console.log({ breedsOptions });
+
+    breedsSelectEl.append(...breedsOptions);
+
+    // for (let i = 0; i < breeds.length; i++) {
+    //   const option = document.createElement(`option`);
+    //   option.value = breeds[i];
+    //   option.innerText = breeds[i];
+    //   breedsSelectEl.appendChild(option);
+    // }
   });
 
-select.addEventListener(`change`, function (event) {
+breedsSelectEl.addEventListener(`change`, function (event) {
   let url = `https://dog.ceo/api/breed/${event.target.value}/images/random`;
 
   getDoggo(url);
